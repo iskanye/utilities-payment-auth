@@ -1,7 +1,9 @@
 // Пакет авторизации в системе
 
-package auth
+package main
+
+import "fmt"
 
 func main() {
-
+	fmt.Print("Hello, Docker!")
 }
