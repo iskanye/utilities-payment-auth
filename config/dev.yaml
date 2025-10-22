@@ -1,5 +1,5 @@
 env: "prod"
-storage_path: "/root/apps/auth/sso.db"
+storage_path: "/root/apps/auth/auth.db"
 grpc:
   port: 44044
   timeout: 5s
