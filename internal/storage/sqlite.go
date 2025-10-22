@@ -8,7 +8,7 @@ import (
 
 	"github.com/iskanye/utilities-payment-auth/internal/models"
 
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/mattn/go-sqlite3"
 )
 
 type Storage struct {
@@ -41,7 +41,8 @@ func (s *Storage) SaveUser(ctx context.Context, email string, passHash []byte) (
 
 	res, err := stmt.ExecContext(ctx, email, passHash)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
+		var sqliteErr sqlite3.Error
+		if errors.As(err, &sqliteErr) && sqliteErr.ExtendedCode == sqlite3.ErrConstraintUnique {
 			return 0, fmt.Errorf("%s: %w", op, ErrUserExists)
 		}
 

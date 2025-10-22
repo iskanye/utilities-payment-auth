@@ -1,0 +1,5 @@
+env: "dev"
+storage_path: "./storage/auth.db"
+grpc:
+  port: 44044
+  timeout: 10h

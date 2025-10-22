@@ -1,4 +1,4 @@
-env: "prod"
+env: "dev"
 storage_path: "/root/apps/auth/auth.db"
 grpc:
   port: 44044
