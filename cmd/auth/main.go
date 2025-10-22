@@ -8,11 +8,13 @@ import (
 
 	"github.com/iskanye/utilities-payment-auth/internal/app"
 	"github.com/iskanye/utilities-payment-auth/internal/config"
+	"github.com/iskanye/utilities-payment-auth/internal/lib/logger"
 )
 
 const (
-	envDev  = "dev"
-	envProd = "prod"
+	envDev   = "dev"
+	envProd  = "prod"
+	envLocal = "local"
 )
 
 func main() {
@@ -38,6 +40,8 @@ func setupLogger(env string) *slog.Logger {
 	var log *slog.Logger
 
 	switch env {
+	case envLocal:
+		log = setupPrettySlog()
 	case envDev:
 		log = slog.New(
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
@@ -49,4 +53,16 @@ func setupLogger(env string) *slog.Logger {
 	}
 
 	return log
+}
+
+func setupPrettySlog() *slog.Logger {
+	opts := logger.PrettyHandlerOptions{
+		SlogOpts: &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		},
+	}
+
+	handler := opts.NewPrettyHandler(os.Stdout)
+
+	return slog.New(handler)
 }
