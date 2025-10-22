@@ -3,5 +3,4 @@
 package payment
 
 func main() {
-
 }

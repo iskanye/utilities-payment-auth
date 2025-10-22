@@ -10,5 +10,4 @@ type Bill struct {
 }
 
 func (b *Bill) Pay() {
-
 }

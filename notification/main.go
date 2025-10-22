@@ -3,5 +3,4 @@
 package notification
 
 func main() {
-
 }

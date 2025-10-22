@@ -3,5 +3,4 @@
 package billing
 
 func main() {
-
 }
