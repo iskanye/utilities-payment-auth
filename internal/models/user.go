@@ -1,8 +1,6 @@
-package main
+package models
 
 import "context"
-
-var Secret string
 
 type User struct {
 	ID       int64
