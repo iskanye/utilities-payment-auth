@@ -1,10 +1,17 @@
+# Сборка
 FROM golang:alpine AS builder
-WORKDIR /build
-ADD go.mod .
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
 COPY . .
-RUN go build -o auth .
+RUN go build -o /go/bin/auth ./cmd/auth/main.go
+
+# Запуск
 FROM alpine
-WORKDIR /build
-COPY --from=builder /build/auth /build/auth
-RUN chmod +x auth
-CMD ["./auth", "--config=\"./config/prod.yaml\""]
+RUN addgroup -S app && adduser -S app -G app
+USER app
+WORKDIR /home/app
+COPY --from=builder /go/bin/auth ./
+COPY --from=builder /app/config ./config
+ENTRYPOINT ["./auth"]
+CMD ["-config", "./config/dev.yaml"]

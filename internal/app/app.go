@@ -25,7 +25,6 @@ func New(
 	}
 
 	authService := auth.New(log, storage, storage, storage, tokenTTL)
-
 	grpcApp := grpc.New(log, authService, grpcPort)
 
 	return &App{
