@@ -7,4 +7,4 @@ FROM alpine
 WORKDIR /build
 COPY --from=builder /build/auth /build/auth
 RUN chmod +x auth
-CMD ["./auth"]
+CMD ["./auth", "--config=\"./config/prod.yaml\""]
