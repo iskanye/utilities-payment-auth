@@ -12,8 +12,8 @@ import (
 )
 
 func main() {
+	cfg := config.MustLoad()
 	log := setupPrettySlog()
-	cfg := config.MustLoad(log)
 	app := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.Secret, cfg.TokenTTL)
 
 	go func() {

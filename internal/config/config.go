@@ -2,7 +2,6 @@ package config
 
 import (
 	"flag"
-	"log/slog"
 	"os"
 	"time"
 
@@ -26,16 +25,16 @@ type GRPCConfig struct {
 	Timeout time.Duration `yaml:"timeout"`
 }
 
-func MustLoad(log *slog.Logger) *Config {
+func MustLoad() *Config {
 	configPath := fetchConfigPath()
 	if configPath == "" {
 		panic("config path is empty")
 	}
 
-	return MustLoadPath(configPath, log)
+	return MustLoadPath(configPath)
 }
 
-func MustLoadPath(configPath string, log *slog.Logger) *Config {
+func MustLoadPath(configPath string) *Config {
 	// check if file exists
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		panic("config file does not exist: " + configPath)
@@ -49,9 +48,6 @@ func MustLoadPath(configPath string, log *slog.Logger) *Config {
 
 	if cfg.Secret == "" {
 		cfg.Secret = gofakeit.Password(true, true, true, false, false, secretLen)
-		log.Info("generated secret key",
-			slog.String("secret", cfg.Secret),
-		)
 	}
 
 	return &cfg

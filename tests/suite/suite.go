@@ -2,7 +2,6 @@ package suite
 
 import (
 	"context"
-	"log/slog"
 	"net"
 	"os"
 	"strconv"
@@ -31,7 +30,7 @@ func New(t *testing.T) (context.Context, *Suite) {
 	t.Helper()
 	t.Parallel()
 
-	cfg := config.MustLoadPath(configPath(), slog.Default())
+	cfg := config.MustLoadPath(configPath())
 
 	ctx, cancelCtx := context.WithTimeout(context.Background(), cfg.GRPC.Timeout)
 
