@@ -8,7 +8,7 @@ import (
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
-	"github.com/iskanye/utilities-payment-auth/internal/grpc/auth"
+	"github.com/iskanye/utilities-payment-auth/internal/auth/grpc/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

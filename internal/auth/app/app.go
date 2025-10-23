@@ -4,9 +4,9 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/iskanye/utilities-payment-auth/internal/app/grpc"
-	"github.com/iskanye/utilities-payment-auth/internal/service/auth"
-	"github.com/iskanye/utilities-payment-auth/internal/storage"
+	"github.com/iskanye/utilities-payment-auth/internal/auth/app/grpc"
+	"github.com/iskanye/utilities-payment-auth/internal/auth/service/auth"
+	"github.com/iskanye/utilities-payment-auth/internal/auth/storage"
 )
 
 type App struct {
