@@ -9,8 +9,6 @@ import (
 	"github.com/iskanye/utilities-payment-auth/internal/storage"
 )
 
-const secretDefaultLen = 15
-
 type App struct {
 	GRPCServer *grpc.App
 }
@@ -23,10 +21,6 @@ func New(
 	tokenTTL time.Duration,
 ) *App {
 	storage, err := storage.New(storagePath)
-	if err != nil {
-		panic(err)
-	}
-
 	if err != nil {
 		panic(err)
 	}

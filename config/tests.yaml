@@ -1,4 +1,3 @@
-env: "local"
 storage_path: "./storage/auth.db"
 secret: "TEST-SECRET"
 grpc:

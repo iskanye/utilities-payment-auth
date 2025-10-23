@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"testing"
 
+	pkgConfig "github.com/iskanye/utilities-payment-api-gateway/pkg/config"
 	"github.com/iskanye/utilities-payment-auth/internal/config"
 	"github.com/iskanye/utilities-payment-proto/auth"
 	"google.golang.org/grpc"
@@ -30,7 +31,7 @@ func New(t *testing.T) (context.Context, *Suite) {
 	t.Helper()
 	t.Parallel()
 
-	cfg := config.MustLoadPath(configPath())
+	cfg := pkgConfig.MustLoadPath(configPath(), func(t *config.Config) {})
 
 	ctx, cancelCtx := context.WithTimeout(context.Background(), cfg.GRPC.Timeout)
 

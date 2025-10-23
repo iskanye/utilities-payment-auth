@@ -6,13 +6,14 @@ import (
 	"os/signal"
 	"syscall"
 
+	pkgConfig "github.com/iskanye/utilities-payment-api-gateway/pkg/config"
 	"github.com/iskanye/utilities-payment-api-gateway/pkg/logger"
 	"github.com/iskanye/utilities-payment-auth/internal/app"
 	"github.com/iskanye/utilities-payment-auth/internal/config"
 )
 
 func main() {
-	cfg := config.MustLoad()
+	cfg := pkgConfig.MustLoad(config.GenerateSecret)
 	log := setupPrettySlog()
 	app := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.Secret, cfg.TokenTTL)
 
