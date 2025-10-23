@@ -7,10 +7,10 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/iskanye/utilities-payment-auth/internal/auth/lib/jwt"
-	"github.com/iskanye/utilities-payment-auth/internal/auth/lib/logger"
-	"github.com/iskanye/utilities-payment-auth/internal/auth/storage"
-	"github.com/iskanye/utilities-payment-auth/pkg/models"
+	"github.com/iskanye/utilities-payment-auth/internal/lib/jwt"
+	"github.com/iskanye/utilities-payment-auth/internal/lib/logger"
+	"github.com/iskanye/utilities-payment-auth/internal/models"
+	"github.com/iskanye/utilities-payment-auth/internal/storage"
 	"golang.org/x/crypto/bcrypt"
 )
 

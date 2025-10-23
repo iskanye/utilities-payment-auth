@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/iskanye/utilities-payment-auth/pkg/models"
+	"github.com/iskanye/utilities-payment-auth/internal/models"
 
 	"github.com/mattn/go-sqlite3"
 )

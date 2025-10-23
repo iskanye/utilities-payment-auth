@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/iskanye/utilities-payment-auth/internal/auth/app"
-	"github.com/iskanye/utilities-payment-auth/internal/auth/config"
-	"github.com/iskanye/utilities-payment-auth/internal/auth/lib/logger"
+	"github.com/iskanye/utilities-payment-auth/internal/app"
+	"github.com/iskanye/utilities-payment-auth/internal/config"
+	"github.com/iskanye/utilities-payment-auth/internal/lib/logger"
 )
 
 const (
