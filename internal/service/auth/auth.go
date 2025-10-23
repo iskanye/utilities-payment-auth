@@ -7,8 +7,8 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/iskanye/utilities-payment-api-gateway/pkg/logger"
 	"github.com/iskanye/utilities-payment-auth/internal/lib/jwt"
-	"github.com/iskanye/utilities-payment-auth/internal/lib/logger"
 	"github.com/iskanye/utilities-payment-auth/internal/storage"
 	"github.com/iskanye/utilities-payment-auth/pkg/models"
 	"golang.org/x/crypto/bcrypt"

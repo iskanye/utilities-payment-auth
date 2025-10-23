@@ -10,6 +10,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.19.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0
+	github.com/iskanye/utilities-payment-api-gateway v0.0.0-20251023123949-e4bfab83c690
 	github.com/iskanye/utilities-payment-proto v0.0.0-20251018225520-803782d2bd71
 	github.com/mattn/go-sqlite3 v1.14.32
 	github.com/stretchr/testify v1.10.0
