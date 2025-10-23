@@ -51,7 +51,7 @@ func (s *serverAPI) Login(
 
 	token, err := s.auth.Login(ctx, in.GetEmail(), in.GetPassword(), int(in.GetAppId()))
 	if err != nil {
-		return nil, status.Error(codes.Internal, "failed to login")
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &protoAuth.LoginResponse{Token: token}, nil
@@ -71,7 +71,7 @@ func (s *serverAPI) Register(
 
 	uid, err := s.auth.Register(ctx, in.GetEmail(), in.GetPassword())
 	if err != nil {
-		return nil, status.Error(codes.Internal, "failed to register user")
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &protoAuth.RegisterResponse{UserId: uid}, nil

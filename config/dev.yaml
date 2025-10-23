@@ -1,4 +1,4 @@
-env: "dev"
+env: "local"
 storage_path: "/root/apps/auth/auth.db"
 grpc:
   port: 44044

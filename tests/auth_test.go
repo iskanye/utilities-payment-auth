@@ -164,7 +164,7 @@ func TestLogin_FailCases(t *testing.T) {
 			email:       gofakeit.Email(),
 			password:    randomFakePassword(),
 			appID:       appID,
-			expectedErr: "invalid email or password",
+			expectedErr: "invalid credentials",
 		},
 		{
 			name:        "Login without AppID",
