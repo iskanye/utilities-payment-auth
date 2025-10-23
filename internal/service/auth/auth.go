@@ -18,7 +18,7 @@ type Auth struct {
 	log         *slog.Logger
 	usrSaver    UserSaver
 	usrProvider UserProvider
-	appProvider AppProvider
+	secret      string
 	tokenTTL    time.Duration
 }
 
@@ -45,14 +45,14 @@ func New(
 	log *slog.Logger,
 	userSaver UserSaver,
 	userProvider UserProvider,
-	appProvider AppProvider,
+	secret string,
 	tokenTTL time.Duration,
 ) *Auth {
 	return &Auth{
 		usrSaver:    userSaver,
 		usrProvider: userProvider,
 		log:         log,
-		appProvider: appProvider,
+		secret:      secret,
 		tokenTTL:    tokenTTL,
 	}
 }
@@ -65,7 +65,6 @@ func (a *Auth) Login(
 	ctx context.Context,
 	email string,
 	password string,
-	appID int,
 ) (string, error) {
 	const op = "Auth.Login"
 
@@ -95,14 +94,9 @@ func (a *Auth) Login(
 		return "", fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
 	}
 
-	app, err := a.appProvider.App(ctx, appID)
-	if err != nil {
-		return "", fmt.Errorf("%s: %w", op, err)
-	}
-
 	log.Info("user logged in successfully")
 
-	token, err := jwt.NewToken(user, app, a.tokenTTL)
+	token, err := jwt.NewToken(user, a.secret, a.tokenTTL)
 	if err != nil {
 		a.log.Error("failed to generate token", logger.Err(err))
 

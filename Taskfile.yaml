@@ -1,0 +1,19 @@
+# ./Taskfile.yaml
+# See: https://taskfile.dev/api/  
+
+version: "3"  
+
+tasks:  
+  default:
+    cmds:  
+      - task: auth  
+  auth:
+    desc: "Start auth service"
+    cmds:
+      - go run ./cmd/auth --config=./config/dev.yaml
+  init_db:
+    aliases:
+      - bd  
+    desc: "Initialize database"  
+    cmds:
+      - go run ./cmd/migrator --storage-path=./storage/auth.db --migrations-path=./migrations

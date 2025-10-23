@@ -13,10 +13,7 @@ import (
 )
 
 const (
-	emptyAppID = 0
-	appID      = 1
-	appSecret  = "test-secret"
-
+	secret         = "TEST-SECRET"
 	passDefaultLen = 10
 )
 
@@ -38,7 +35,6 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 	respLogin, err := st.AuthClient.Login(ctx, &auth.LoginRequest{
 		Email:    email,
 		Password: pass,
-		AppId:    appID,
 	})
 	require.NoError(t, err)
 
@@ -48,7 +44,7 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 	loginTime := time.Now()
 
 	tokenParsed, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return []byte(appSecret), nil
+		return []byte(secret), nil
 	})
 	require.NoError(t, err)
 
@@ -57,7 +53,6 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 
 	assert.Equal(t, respReg.GetUserId(), int64(claims["uid"].(float64)))
 	assert.Equal(t, email, claims["email"].(string))
-	assert.Equal(t, appID, int(claims["app_id"].(float64)))
 
 	const deltaSeconds = 1
 
@@ -135,43 +130,31 @@ func TestLogin_FailCases(t *testing.T) {
 		name        string
 		email       string
 		password    string
-		appID       int32
 		expectedErr string
 	}{
 		{
 			name:        "Login with Empty Password",
 			email:       gofakeit.Email(),
 			password:    "",
-			appID:       appID,
 			expectedErr: "password is required",
 		},
 		{
 			name:        "Login with Empty Email",
 			email:       "",
 			password:    randomFakePassword(),
-			appID:       appID,
 			expectedErr: "email is required",
 		},
 		{
 			name:        "Login with Both Empty Email and Password",
 			email:       "",
 			password:    "",
-			appID:       appID,
 			expectedErr: "email is required",
 		},
 		{
 			name:        "Login with Non-Matching Password",
 			email:       gofakeit.Email(),
 			password:    randomFakePassword(),
-			appID:       appID,
 			expectedErr: "invalid credentials",
-		},
-		{
-			name:        "Login without AppID",
-			email:       gofakeit.Email(),
-			password:    randomFakePassword(),
-			appID:       emptyAppID,
-			expectedErr: "app_id is required",
 		},
 	}
 
@@ -186,7 +169,6 @@ func TestLogin_FailCases(t *testing.T) {
 			_, err = st.AuthClient.Login(ctx, &auth.LoginRequest{
 				Email:    tt.email,
 				Password: tt.password,
-				AppId:    tt.appID,
 			})
 			require.Error(t, err)
 			require.Contains(t, err.Error(), tt.expectedErr)

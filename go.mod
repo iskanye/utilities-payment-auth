@@ -4,14 +4,13 @@ go 1.25.3
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.28.0
-	github.com/fatih/color v1.18.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/golang-migrate/migrate/v4 v4.19.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/iskanye/utilities-payment-api-gateway v0.0.0-20251023123949-e4bfab83c690
-	github.com/iskanye/utilities-payment-proto v0.0.0-20251018225520-803782d2bd71
+	github.com/iskanye/utilities-payment-proto v0.0.0-20251023181841-7f811974ce7e
 	github.com/mattn/go-sqlite3 v1.14.32
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/crypto v0.43.0
@@ -21,6 +20,7 @@ require (
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/fatih/color v1.18.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect

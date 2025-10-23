@@ -20,7 +20,6 @@ type Auth interface {
 		ctx context.Context,
 		email string,
 		password string,
-		appID int,
 	) (token string, err error)
 	Register(
 		ctx context.Context,
@@ -45,11 +44,7 @@ func (s *serverAPI) Login(
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
 
-	if in.GetAppId() == 0 {
-		return nil, status.Error(codes.InvalidArgument, "app_id is required")
-	}
-
-	token, err := s.auth.Login(ctx, in.GetEmail(), in.GetPassword(), int(in.GetAppId()))
+	token, err := s.auth.Login(ctx, in.GetEmail(), in.GetPassword())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

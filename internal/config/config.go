@@ -2,15 +2,20 @@ package config
 
 import (
 	"flag"
+	"log/slog"
 	"os"
 	"time"
 
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/ilyakaznacheev/cleanenv"
 )
+
+const secretLen = 15
 
 type Config struct {
 	Env            string     `yaml:"env" env-default:"local"`
 	StoragePath    string     `yaml:"storage_path" env-required:"true"`
+	Secret         string     `yaml:"secret"`
 	GRPC           GRPCConfig `yaml:"grpc"`
 	MigrationsPath string
 	TokenTTL       time.Duration `yaml:"token_ttl" env-default:"1h"`
@@ -21,16 +26,16 @@ type GRPCConfig struct {
 	Timeout time.Duration `yaml:"timeout"`
 }
 
-func MustLoad() *Config {
+func MustLoad(log *slog.Logger) *Config {
 	configPath := fetchConfigPath()
 	if configPath == "" {
 		panic("config path is empty")
 	}
 
-	return MustLoadPath(configPath)
+	return MustLoadPath(configPath, log)
 }
 
-func MustLoadPath(configPath string) *Config {
+func MustLoadPath(configPath string, log *slog.Logger) *Config {
 	// check if file exists
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		panic("config file does not exist: " + configPath)
@@ -40,6 +45,13 @@ func MustLoadPath(configPath string) *Config {
 
 	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
 		panic("cannot read config: " + err.Error())
+	}
+
+	if cfg.Secret == "" {
+		cfg.Secret = gofakeit.Password(true, true, true, false, false, secretLen)
+		log.Info("generated secret key",
+			slog.String("secret", cfg.Secret),
+		)
 	}
 
 	return &cfg

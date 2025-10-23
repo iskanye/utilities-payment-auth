@@ -11,16 +11,10 @@ import (
 	"github.com/iskanye/utilities-payment-auth/internal/config"
 )
 
-const (
-	envDev   = "dev"
-	envProd  = "prod"
-	envLocal = "local"
-)
-
 func main() {
-	cfg := config.MustLoad()
-	log := setupLogger(cfg.Env)
-	app := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
+	log := setupPrettySlog()
+	cfg := config.MustLoad(log)
+	app := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.Secret, cfg.TokenTTL)
 
 	go func() {
 		app.GRPCServer.MustRun()
@@ -34,25 +28,6 @@ func main() {
 
 	app.GRPCServer.Stop()
 	log.Info("Gracefully stopped")
-}
-
-func setupLogger(env string) *slog.Logger {
-	var log *slog.Logger
-
-	switch env {
-	case envLocal:
-		log = setupPrettySlog()
-	case envDev:
-		log = slog.New(
-			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
-		)
-	case envProd:
-		log = slog.New(
-			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}),
-		)
-	}
-
-	return log
 }
 
 func setupPrettySlog() *slog.Logger {
