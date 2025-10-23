@@ -1,5 +1,5 @@
 env: "local"
-storage_path: "./storage/auth.db"
+storage_path: "/root/apps/auth/auth.db"
 grpc:
   port: 44044
   timeout: 5s
