@@ -37,10 +37,6 @@ type UserProvider interface {
 	IsAdmin(ctx context.Context, userID int64) (bool, error)
 }
 
-type AppProvider interface {
-	App(ctx context.Context, appID int) (models.App, error)
-}
-
 func New(
 	log *slog.Logger,
 	userSaver UserSaver,
