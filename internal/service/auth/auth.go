@@ -142,7 +142,7 @@ func (a *Auth) Validate(
 	ctx context.Context,
 	token string,
 ) (bool, error) {
-	const op = "Auth.RegisterNewUser"
+	const op = "Auth.Validate"
 
 	log := a.log.With(
 		slog.String("op", op),

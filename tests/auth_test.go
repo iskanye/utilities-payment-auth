@@ -17,7 +17,94 @@ const (
 	passDefaultLen = 10
 )
 
-// TODO: add token fail validation cases
+func TestValidation_Success(t *testing.T) {
+	ctx, st := suite.New(t)
+	email := gofakeit.Email()
+	pass := randomFakePassword()
+
+	respReg, err := st.AuthClient.Register(ctx, &auth.RegisterRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+	assert.NotEmpty(t, respReg.GetUserId())
+
+	respLogin, err := st.AuthClient.Login(ctx, &auth.LoginRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+
+	token := respLogin.GetToken()
+	require.NotEmpty(t, token)
+
+	respVal, err := st.AuthClient.Validate(ctx, &auth.ValidateRequest{
+		Token: token,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, respVal.IsValid, true)
+}
+
+func TestValidation_Expired(t *testing.T) {
+	ctx, st := suite.New(t)
+	email := gofakeit.Email()
+	pass := randomFakePassword()
+
+	respReg, err := st.AuthClient.Register(ctx, &auth.RegisterRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+	assert.NotEmpty(t, respReg.GetUserId())
+
+	respLogin, err := st.AuthClient.Login(ctx, &auth.LoginRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+
+	token := respLogin.GetToken()
+	require.NotEmpty(t, token)
+
+	time.Sleep(2 * time.Second)
+
+	_, err = st.AuthClient.Validate(ctx, &auth.ValidateRequest{
+		Token: token,
+	})
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "Token is expired")
+}
+
+func TestValidation_FailCases(t *testing.T) {
+	ctx, st := suite.New(t)
+
+	tests := []struct {
+		name        string
+		token       string
+		expectedErr string
+	}{
+		{
+			name:        "Validate empty token",
+			token:       "",
+			expectedErr: "token is required",
+		},
+		{
+			name:        "Validate invalid token",
+			token:       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJuYmYiOjE0NDQ0Nzg0MDB9.u1riaD1rW97opCoAuRCTy4w58Br-Zk-bh7vLiRIsrpU",
+			expectedErr: "signature is invalid",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := st.AuthClient.Validate(ctx, &auth.ValidateRequest{
+				Token: tt.token,
+			})
+			require.Error(t, err)
+			require.Contains(t, err.Error(), tt.expectedErr)
+		})
+	}
+}
 
 func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 	ctx, st := suite.New(t)
