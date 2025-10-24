@@ -31,6 +31,8 @@ github.com/hashicorp/go-multierror v1.1.1 h1:H5DkEtf6CXdFp0N0Em5UCwQpXMWke8IA0+l
 github.com/hashicorp/go-multierror v1.1.1/go.mod h1:iw975J/qwKPdAO1clOe2L8331t/9/fmwbPZ6JB6eMoM=
 github.com/ilyakaznacheev/cleanenv v1.5.0 h1:0VNZXggJE2OYdXE87bfSSwGxeiGt9moSR2lOrsHHvr4=
 github.com/ilyakaznacheev/cleanenv v1.5.0/go.mod h1:a5aDzaJrLCQZsazHol1w8InnDcOX0OColm64SlIi6gk=
+github.com/iskanye/utilities-payment v0.0.0-20251024110023-2de376bad4fb h1:VNYlAgDnhEjR8M6gF9/6K/hrQQBNn/BK2yNiy04bL6Q=
+github.com/iskanye/utilities-payment v0.0.0-20251024110023-2de376bad4fb/go.mod h1:uvcQON/sQqH3EEUUbDDprKItbqhFzk2dJgSMjn5SEag=
 github.com/iskanye/utilities-payment-api-gateway v0.0.0-20251023195107-79a8e2414ec0 h1:98cudfaoIRCpp6DYkJ0RQQNvpXRf9BuzcX8x3YK53ZI=
 github.com/iskanye/utilities-payment-api-gateway v0.0.0-20251023195107-79a8e2414ec0/go.mod h1:CScVociEKs7RLr3HtZ16VNeWojw0R9/vlVaKdgn9mPs=
 github.com/iskanye/utilities-payment-proto v0.0.0-20251023181841-7f811974ce7e h1:dEdV83V+TKZaYJbDns+m7vCMptzGSrnLYbzgSVTh3zY=

@@ -7,9 +7,9 @@ import (
 	"syscall"
 
 	pkgConfig "github.com/iskanye/utilities-payment-api-gateway/pkg/config"
-	"github.com/iskanye/utilities-payment-api-gateway/pkg/logger"
 	"github.com/iskanye/utilities-payment-auth/internal/app"
 	"github.com/iskanye/utilities-payment-auth/internal/config"
+	"github.com/iskanye/utilities-payment/pkg/logger"
 )
 
 func main() {

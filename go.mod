@@ -8,6 +8,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/golang-migrate/migrate/v4 v4.19.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
+	github.com/iskanye/utilities-payment v0.0.0-20251024110023-2de376bad4fb
 	github.com/iskanye/utilities-payment-api-gateway v0.0.0-20251023195107-79a8e2414ec0
 	github.com/iskanye/utilities-payment-proto v0.0.0-20251023181841-7f811974ce7e
 	github.com/mattn/go-sqlite3 v1.14.32
