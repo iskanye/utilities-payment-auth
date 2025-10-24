@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/iskanye/utilities-payment-auth/internal/app/grpc"
+	"github.com/iskanye/utilities-payment-auth/internal/lib/jwt"
 	"github.com/iskanye/utilities-payment-auth/internal/service/auth"
 	"github.com/iskanye/utilities-payment-auth/internal/storage"
 )
@@ -25,7 +26,7 @@ func New(
 		panic(err)
 	}
 
-	authService := auth.New(log, storage, storage, secret, tokenTTL)
+	authService := auth.New(log, storage, storage, jwt.Validate, secret, tokenTTL)
 	grpcApp := grpc.New(log, authService, grpcPort)
 
 	return &App{

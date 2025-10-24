@@ -18,6 +18,7 @@ type Auth struct {
 	log         *slog.Logger
 	usrSaver    UserSaver
 	usrProvider UserProvider
+	validate    func(string, string) (bool, error)
 	secret      string
 	tokenTTL    time.Duration
 }
@@ -41,12 +42,14 @@ func New(
 	log *slog.Logger,
 	userSaver UserSaver,
 	userProvider UserProvider,
+	validate func(string, string) (bool, error),
 	secret string,
 	tokenTTL time.Duration,
 ) *Auth {
 	return &Auth{
 		usrSaver:    userSaver,
 		usrProvider: userProvider,
+		validate:    validate,
 		log:         log,
 		secret:      secret,
 		tokenTTL:    tokenTTL,
@@ -104,7 +107,11 @@ func (a *Auth) Login(
 
 // RegisterNewUser registers new user in the system and returns user ID.
 // If user with given username already exists, returns error.
-func (a *Auth) Register(ctx context.Context, email string, pass string) (int64, error) {
+func (a *Auth) Register(
+	ctx context.Context,
+	email string,
+	pass string,
+) (int64, error) {
 	const op = "Auth.RegisterNewUser"
 
 	log := a.log.With(
@@ -129,6 +136,28 @@ func (a *Auth) Register(ctx context.Context, email string, pass string) (int64, 
 	}
 
 	return id, nil
+}
+
+func (a *Auth) Validate(
+	ctx context.Context,
+	token string,
+) (bool, error) {
+	const op = "Auth.RegisterNewUser"
+
+	log := a.log.With(
+		slog.String("op", op),
+	)
+
+	log.Info("validating user")
+
+	isValid, err := a.validate(token, a.secret)
+	if err != nil {
+		log.Error("failed to validate user", logger.Err(err))
+
+		return false, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return isValid, nil
 }
 
 // IsAdmin checks if user is admin.

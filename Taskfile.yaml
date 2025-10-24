@@ -12,12 +12,14 @@ tasks:
     cmds:
       - go run ./cmd/auth --config=./config/dev.yaml
   auth-test:
+    aliases:
+      - test
     desc: "Start auth service (for testing)"
     cmds:
       - go run ./cmd/auth --config=./config/tests.yaml
   init_db:
     aliases:
-      - bd  
+      - db
     desc: "Initialize database"  
     cmds:
       - go run ./cmd/migrator --storage-path=./storage/auth.db --migrations-path=./migrations
