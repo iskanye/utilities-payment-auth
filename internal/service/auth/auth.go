@@ -30,6 +30,7 @@ type UserSaver interface {
 		ctx context.Context,
 		email string,
 		passHash []byte,
+		isAdmin bool,
 	) (uid int64, err error)
 }
 
@@ -128,7 +129,7 @@ func (a *Auth) Register(
 		return 0, fmt.Errorf("%s: %w", op, err)
 	}
 
-	id, err := a.usrSaver.SaveUser(ctx, email, passHash)
+	id, err := a.usrSaver.SaveUser(ctx, email, passHash, false)
 	if err != nil {
 		log.Error("failed to save user", logger.Err(err))
 

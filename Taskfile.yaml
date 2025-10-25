@@ -22,4 +22,8 @@ tasks:
       - db
     desc: "Initialize database"  
     cmds:
-      - go run ./cmd/migrator --storage-path=./storage/auth.db --migrations-path=./migrations
+      - go run ./cmd/migrator --storage-path=./storage/auth.db --migrations-path=./migrations      
+  admins:
+    desc: "Add admins to database"  
+    cmds:
+      - go run ./cmd/admins --storage=./storage/auth.db --admins=./config/admins.yaml
