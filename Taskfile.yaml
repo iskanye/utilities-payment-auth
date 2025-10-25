@@ -11,12 +11,18 @@ tasks:
     desc: "Start auth service"
     cmds:
       - go run ./cmd/auth --config=./config/dev.yaml
+
+  test:
+    desc: "Run tests"
+    cmds:
+      - task -p auth-test go-test
+  go-test:    
+    cmds: 
+      - go test ./tests
   auth-test:
-    aliases:
-      - test
-    desc: "Start auth service (for testing)"
     cmds:
       - go run ./cmd/auth --config=./config/tests.yaml
+
   init_db:
     aliases:
       - db
