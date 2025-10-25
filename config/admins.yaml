@@ -1,5 +1,5 @@
 admins:
-- email: "admi112n@admin.com"
+- email: "admin@admin.com"
   password: "admin"
-- email: "admin112@admin.ru"
+- email: "admin@admin.ru"
   password: "admin"

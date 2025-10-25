@@ -43,7 +43,7 @@ func main() {
 			panic(err)
 		}
 
-		userId, err := s.SaveUser(ctx, i.Email, passHash, false)
+		userId, err := s.SaveUser(ctx, i.Email, passHash, true)
 		if err != nil {
 			fmt.Println("Admin with that credentials already in database:", i.Email)
 			continue
