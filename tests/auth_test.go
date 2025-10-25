@@ -17,34 +17,6 @@ const (
 	passDefaultLen = 10
 )
 
-func TestValidation_Success(t *testing.T) {
-	ctx, st := suite.New(t)
-	email := gofakeit.Email()
-	pass := randomFakePassword()
-
-	respReg, err := st.AuthClient.Register(ctx, &auth.RegisterRequest{
-		Email:    email,
-		Password: pass,
-	})
-	require.NoError(t, err)
-	assert.NotEmpty(t, respReg.GetUserId())
-
-	respLogin, err := st.AuthClient.Login(ctx, &auth.LoginRequest{
-		Email:    email,
-		Password: pass,
-	})
-	require.NoError(t, err)
-
-	token := respLogin.GetToken()
-	require.NotEmpty(t, token)
-
-	respVal, err := st.AuthClient.Validate(ctx, &auth.ValidateRequest{
-		Token: token,
-	})
-	require.NoError(t, err)
-	assert.Equal(t, respVal.IsValid, true)
-}
-
 func TestValidation_Expired(t *testing.T) {
 	ctx, st := suite.New(t)
 	email := gofakeit.Email()
@@ -124,9 +96,16 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 		Password: pass,
 	})
 	require.NoError(t, err)
+	assert.NotEmpty(t, respLogin.GetUserId())
 
 	token := respLogin.GetToken()
 	require.NotEmpty(t, token)
+
+	respVal, err := st.AuthClient.Validate(ctx, &auth.ValidateRequest{
+		Token: token,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, respVal.IsValid, true)
 
 	loginTime := time.Now()
 
@@ -145,6 +124,51 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 
 	// check if exp of token is in correct range, ttl get from st.Cfg.TokenTTL
 	assert.InDelta(t, loginTime.Add(st.Cfg.TokenTTL).Unix(), claims["exp"].(float64), deltaSeconds)
+}
+
+func TestRegisterLogin_Permissions_NotAdmin(t *testing.T) {
+	ctx, st := suite.New(t)
+
+	email := gofakeit.Email()
+	pass := randomFakePassword()
+
+	respReg, err := st.AuthClient.Register(ctx, &auth.RegisterRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+	assert.NotEmpty(t, respReg.GetUserId())
+
+	respAdm, err := st.AuthClient.IsAdmin(ctx, &auth.User{
+		UserId: respReg.GetUserId(),
+	})
+	require.NoError(t, err)
+	assert.Equal(t, respAdm.GetIsAdmin(), false)
+}
+
+func TestRegisterLogin_Permissions_IsAdmin(t *testing.T) {
+	ctx, st := suite.New(t)
+
+	const (
+		email = "admin@admin.com"
+		pass  = "admin"
+	)
+
+	respLogin, err := st.AuthClient.Login(ctx, &auth.LoginRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+	assert.NotEmpty(t, respLogin.GetUserId())
+
+	token := respLogin.GetToken()
+	require.NotEmpty(t, token)
+
+	respAdm, err := st.AuthClient.IsAdmin(ctx, &auth.User{
+		UserId: respLogin.GetUserId(),
+	})
+	require.NoError(t, err)
+	assert.Equal(t, respAdm.GetIsAdmin(), true)
 }
 
 func TestRegisterLogin_DuplicatedRegistration(t *testing.T) {

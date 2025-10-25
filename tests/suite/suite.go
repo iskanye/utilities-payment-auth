@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"testing"
 
-	pkgConfig "github.com/iskanye/utilities-payment-api-gateway/pkg/config"
 	"github.com/iskanye/utilities-payment-auth/internal/config"
 	"github.com/iskanye/utilities-payment-proto/auth"
+	pkgConfig "github.com/iskanye/utilities-payment/pkg/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

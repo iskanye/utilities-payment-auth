@@ -19,5 +19,6 @@ COPY --from=builder /app/config ./config
 COPY --from=builder /app/migrations ./migrations
 RUN mkdir storage
 RUN ./migrator --storage-path=./storage/auth.db --migrations-path=./migrations
+EXPOSE 44044
 ENTRYPOINT ["./auth"]
 CMD ["-config", "./config/dev.yaml"]

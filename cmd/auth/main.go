@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	pkgConfig "github.com/iskanye/utilities-payment-api-gateway/pkg/config"
 	"github.com/iskanye/utilities-payment-auth/internal/app"
 	"github.com/iskanye/utilities-payment-auth/internal/config"
+	pkgConfig "github.com/iskanye/utilities-payment/pkg/config"
 	"github.com/iskanye/utilities-payment/pkg/logger"
 )
 

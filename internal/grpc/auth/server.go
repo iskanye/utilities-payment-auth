@@ -20,7 +20,7 @@ type Auth interface {
 		ctx context.Context,
 		email string,
 		password string,
-	) (token string, err error)
+	) (token string, userID int64, err error)
 	Register(
 		ctx context.Context,
 		email string,
@@ -30,6 +30,10 @@ type Auth interface {
 		ctx context.Context,
 		token string,
 	) (isValid bool, err error)
+	IsAdmin(
+		ctx context.Context,
+		userId int64,
+	) (isAdmin bool, err error)
 }
 
 func Register(gRPCServer *grpc.Server, auth Auth) {
@@ -48,12 +52,15 @@ func (s *serverAPI) Login(
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
 
-	token, err := s.auth.Login(ctx, in.GetEmail(), in.GetPassword())
+	token, userId, err := s.auth.Login(ctx, in.GetEmail(), in.GetPassword())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &protoAuth.LoginResponse{Token: token}, nil
+	return &protoAuth.LoginResponse{
+		Token:  token,
+		UserId: userId,
+	}, nil
 }
 
 func (s *serverAPI) Register(
@@ -90,4 +97,20 @@ func (s *serverAPI) Validate(
 	}
 
 	return &protoAuth.ValidateResponse{IsValid: isValid}, nil
+}
+
+func (s *serverAPI) IsAdmin(
+	ctx context.Context,
+	in *protoAuth.User,
+) (*protoAuth.Permissions, error) {
+	if in.UserId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "user_id is required")
+	}
+
+	isAdmin, err := s.auth.IsAdmin(ctx, in.GetUserId())
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &protoAuth.Permissions{IsAdmin: isAdmin}, nil
 }

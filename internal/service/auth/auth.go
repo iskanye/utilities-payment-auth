@@ -7,9 +7,9 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/iskanye/utilities-payment-api-gateway/pkg/logger"
 	"github.com/iskanye/utilities-payment-auth/internal/lib/jwt"
 	"github.com/iskanye/utilities-payment-auth/internal/storage"
+	"github.com/iskanye/utilities-payment/pkg/logger"
 	"github.com/iskanye/utilities-payment/pkg/models"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -35,8 +35,14 @@ type UserSaver interface {
 }
 
 type UserProvider interface {
-	User(ctx context.Context, email string) (models.User, error)
-	IsAdmin(ctx context.Context, userID int64) (bool, error)
+	User(
+		ctx context.Context,
+		email string,
+	) (models.User, error)
+	IsAdmin(
+		ctx context.Context,
+		userID int64,
+	) (bool, error)
 }
 
 func New(
@@ -65,7 +71,7 @@ func (a *Auth) Login(
 	ctx context.Context,
 	email string,
 	password string,
-) (string, error) {
+) (string, int64, error) {
 	const op = "Auth.Login"
 
 	log := a.log.With(
@@ -80,18 +86,18 @@ func (a *Auth) Login(
 		if errors.Is(err, storage.ErrUserNotFound) {
 			a.log.Warn("user not found", logger.Err(err))
 
-			return "", fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
+			return "", 0, fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
 		}
 
 		a.log.Error("failed to get user", logger.Err(err))
 
-		return "", fmt.Errorf("%s: %w", op, err)
+		return "", 0, fmt.Errorf("%s: %w", op, err)
 	}
 
 	if err := bcrypt.CompareHashAndPassword(user.PassHash, []byte(password)); err != nil {
 		a.log.Info("invalid credentials", logger.Err(err))
 
-		return "", fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
+		return "", 0, fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
 	}
 
 	log.Info("user logged in successfully")
@@ -100,10 +106,10 @@ func (a *Auth) Login(
 	if err != nil {
 		a.log.Error("failed to generate token", logger.Err(err))
 
-		return "", fmt.Errorf("%s: %w", op, err)
+		return "", 0, fmt.Errorf("%s: %w", op, err)
 	}
 
-	return token, nil
+	return token, user.ID, nil
 }
 
 // RegisterNewUser registers new user in the system and returns user ID.
@@ -162,7 +168,10 @@ func (a *Auth) Validate(
 }
 
 // IsAdmin checks if user is admin.
-func (a *Auth) IsAdmin(ctx context.Context, userID int64) (bool, error) {
+func (a *Auth) IsAdmin(
+	ctx context.Context,
+	userID int64,
+) (bool, error) {
 	const op = "Auth.IsAdmin"
 
 	log := a.log.With(
