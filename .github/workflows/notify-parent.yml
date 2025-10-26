@@ -16,11 +16,14 @@ jobs:
         shell: bash
 
     steps:
-    - name: Github REST API Call
+    - name: Github API Call
       env:
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PARENT_REPO: iskanye/utilities-payment
         PARENT_BRANCH: main
-        WORKFLOW_ID: 201107853
+        WORKFLOW: submodules.yml
       run: |
-        curl -fL --retry 3 -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ env.TOKEN }}" https://api.github.com/repos/${{ env.PARENT_REPO }}/actions/workflows/${{ env.WORKFLOW_ID }}/dispatches -d '{"ref":"${{ env.PARENT_BRANCH }}"}'
+        curl -fL --retry 3 -X POST \
+         -H "Accept: application/vnd.github.v3+json" \
+         -H "Authorization: token ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ env.PARENT_REPO }}/actions/workflows/${{ env.WORKFLOW }}/dispatches \
+         -d '{"ref":"${{ env.PARENT_BRANCH }}"}'
