@@ -34,3 +34,14 @@ tasks:
     desc: "Add admins to database"  
     cmds:
       - go run ./cmd/admins --storage=./storage/auth.db --admins=./config/admins.yaml
+
+  docker-build:
+    aliases:
+      - build
+    cmds:
+      - docker build -t auth:dev . 
+  docker-run:
+    aliases:
+      - run
+    cmds:
+      - docker run -p 44044:44044 auth:dev 
