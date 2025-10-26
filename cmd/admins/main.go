@@ -9,7 +9,7 @@ import (
 	"github.com/iskanye/utilities-payment/pkg/config"
 	"golang.org/x/crypto/bcrypt"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/glebarez/go-sqlite"
 )
 
 type Config struct {

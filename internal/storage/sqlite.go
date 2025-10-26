@@ -6,8 +6,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/glebarez/go-sqlite"
 	"github.com/iskanye/utilities-payment/pkg/models"
-	"github.com/mattn/go-sqlite3"
+	sqlite3 "modernc.org/sqlite/lib"
 )
 
 type Storage struct {
@@ -17,7 +18,7 @@ type Storage struct {
 func New(storagePath string) (*Storage, error) {
 	const op = "storage.sqlite.New"
 
-	db, err := sql.Open("sqlite3", storagePath)
+	db, err := sql.Open("sqlite", storagePath)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
@@ -40,8 +41,7 @@ func (s *Storage) SaveUser(ctx context.Context, email string, passHash []byte, i
 
 	res, err := stmt.ExecContext(ctx, email, passHash, isAdmin)
 	if err != nil {
-		var sqliteErr sqlite3.Error
-		if errors.As(err, &sqliteErr) && sqliteErr.ExtendedCode == sqlite3.ErrConstraintUnique {
+		if sqliteErr, ok := err.(*sqlite.Error); ok && sqliteErr.Code() == sqlite3.SQLITE_CONSTRAINT_UNIQUE {
 			return 0, fmt.Errorf("%s: %w", op, ErrUserExists)
 		}
 
