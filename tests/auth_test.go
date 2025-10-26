@@ -15,6 +15,9 @@ import (
 const (
 	secret         = "TEST-SECRET"
 	passDefaultLen = 10
+
+	adminEmail = "admin@admin.com"
+	adminPass  = "admin"
 )
 
 func TestValidation_Expired(t *testing.T) {
@@ -149,14 +152,9 @@ func TestRegisterLogin_Permissions_NotAdmin(t *testing.T) {
 func TestRegisterLogin_Permissions_IsAdmin(t *testing.T) {
 	ctx, st := suite.New(t)
 
-	const (
-		email = "admin@admin.com"
-		pass  = "admin"
-	)
-
 	respLogin, err := st.AuthClient.Login(ctx, &auth.LoginRequest{
-		Email:    email,
-		Password: pass,
+		Email:    adminEmail,
+		Password: adminPass,
 	})
 	require.NoError(t, err)
 	assert.NotEmpty(t, respLogin.GetUserId())
