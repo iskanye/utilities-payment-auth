@@ -18,12 +18,9 @@ type Auth struct {
 	log         *slog.Logger
 	usrSaver    UserSaver
 	usrProvider UserProvider
-	validate    func(string, string) (bool, error)
 	secret      string
 	tokenTTL    time.Duration
 }
-
-var ErrInvalidCredentials = errors.New("invalid credentials")
 
 type UserSaver interface {
 	SaveUser(
@@ -45,18 +42,18 @@ type UserProvider interface {
 	) (bool, error)
 }
 
+var ErrInvalidCredentials = errors.New("invalid credentials")
+
 func New(
 	log *slog.Logger,
 	userSaver UserSaver,
 	userProvider UserProvider,
-	validate func(string, string) (bool, error),
 	secret string,
 	tokenTTL time.Duration,
 ) *Auth {
 	return &Auth{
 		usrSaver:    userSaver,
 		usrProvider: userProvider,
-		validate:    validate,
 		log:         log,
 		secret:      secret,
 		tokenTTL:    tokenTTL,
@@ -157,7 +154,7 @@ func (a *Auth) Validate(
 
 	log.Info("validating user")
 
-	isValid, err := a.validate(token, a.secret)
+	isValid, err := jwt.Validate(token, a.secret)
 	if err != nil {
 		log.Error("failed to validate user", logger.Err(err))
 
