@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,7 +13,7 @@ import (
 
 func main() {
 	cfg := pkgConfig.MustLoad(config.GenerateSecret)
-	log := setupPrettySlog()
+	log := logger.SetupPrettySlog()
 	app := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.Secret, cfg.TokenTTL)
 
 	go func() {
@@ -29,16 +28,4 @@ func main() {
 
 	app.GRPCServer.Stop()
 	log.Info("Gracefully stopped")
-}
-
-func setupPrettySlog() *slog.Logger {
-	opts := logger.PrettyHandlerOptions{
-		SlogOpts: &slog.HandlerOptions{
-			Level: slog.LevelDebug,
-		},
-	}
-
-	handler := opts.NewPrettyHandler(os.Stdout)
-
-	return slog.New(handler)
 }
