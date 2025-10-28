@@ -161,6 +161,8 @@ func (a *Auth) Validate(
 		return false, fmt.Errorf("%s: %w", op, err)
 	}
 
+	log.Info("user validated", slog.Bool("is_valid", isValid))
+
 	return isValid, nil
 }
 
@@ -183,7 +185,7 @@ func (a *Auth) IsAdmin(
 		return false, fmt.Errorf("%s: %w", op, err)
 	}
 
-	log.Info("checked if user is admin", slog.Bool("is_admin", isAdmin))
+	log.Info("got user permissions", slog.Bool("is_admin", isAdmin))
 
 	return isAdmin, nil
 }
