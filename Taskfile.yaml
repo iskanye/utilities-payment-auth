@@ -9,6 +9,9 @@ tasks:
       - task: auth  
   auth:
     desc: "Start auth service"
+    deps:
+      - init_db
+      - admins
     cmds:
       - go run ./cmd/auth --config=./config/dev.yaml
 

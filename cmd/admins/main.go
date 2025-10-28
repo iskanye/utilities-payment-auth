@@ -49,6 +49,6 @@ func main() {
 			continue
 		}
 
-		fmt.Println("New admin id ", userId)
+		fmt.Println("New admin id", userId)
 	}
 }
