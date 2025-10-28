@@ -10,7 +10,6 @@ tasks:
   auth:
     desc: "Start auth service"
     deps:
-      - init_db
       - admins
     cmds:
       - go run ./cmd/auth --config=./config/dev.yaml
@@ -35,6 +34,8 @@ tasks:
       - go run ./cmd/migrator --storage-path=./storage/auth.db --migrations-path=./migrations      
   admins:
     desc: "Add admins to database"  
+    deps:
+      - init_db
     cmds:
       - go run ./cmd/admins --storage=./storage/auth.db --admins=./config/admins.yaml
 
