@@ -20,7 +20,7 @@ type Auth interface {
 		ctx context.Context,
 		email string,
 		password string,
-	) (token string, userID int64, err error)
+	) (token string, err error)
 	Register(
 		ctx context.Context,
 		email string,
@@ -48,14 +48,13 @@ func (s *serverAPI) Login(
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
 
-	token, userId, err := s.auth.Login(ctx, in.GetEmail(), in.GetPassword())
+	token, err := s.auth.Login(ctx, in.GetEmail(), in.GetPassword())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &protoAuth.LoginResponse{
-		Token:  token,
-		UserId: userId,
+		Token: token,
 	}, nil
 }
 
