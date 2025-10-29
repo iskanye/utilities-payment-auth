@@ -38,7 +38,6 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 		Password: pass,
 	})
 	require.NoError(t, err)
-	assert.NotEmpty(t, respLogin.GetUserId())
 
 	token := respLogin.GetToken()
 	require.NotEmpty(t, token)
@@ -90,13 +89,20 @@ func TestRegisterLogin_Permissions_IsAdmin(t *testing.T) {
 		Password: adminPass,
 	})
 	require.NoError(t, err)
-	assert.NotEmpty(t, respLogin.GetUserId())
 
 	token := respLogin.GetToken()
 	require.NotEmpty(t, token)
 
+	tokenParsed, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
+	require.NoError(t, err)
+
+	claims, ok := tokenParsed.Claims.(jwt.MapClaims)
+	require.True(t, ok)
+
 	respAdm, err := st.AuthClient.IsAdmin(ctx, &auth.User{
-		UserId: respLogin.GetUserId(),
+		UserId: int64(claims["uid"].(float64)),
 	})
 	require.NoError(t, err)
 	assert.Equal(t, respAdm.GetIsAdmin(), true)
@@ -122,6 +128,36 @@ func TestRegisterLogin_DuplicatedRegistration(t *testing.T) {
 	require.Error(t, err)
 	assert.Empty(t, respReg.GetUserId())
 	assert.ErrorContains(t, err, "user already exists")
+}
+
+func TestRegisterLogin_TokenExpired(t *testing.T) {
+	ctx, st := suite.New(t)
+
+	email := gofakeit.Email()
+	pass := randomFakePassword()
+
+	respReg, err := st.AuthClient.Register(ctx, &auth.RegisterRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+	assert.NotEmpty(t, respReg.GetUserId())
+
+	respLogin, err := st.AuthClient.Login(ctx, &auth.LoginRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+
+	token := respLogin.GetToken()
+	require.NotEmpty(t, token)
+
+	time.Sleep(2 * time.Second)
+
+	_, err = jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
+	require.Contains(t, err.Error(), "token is expired")
 }
 
 func TestRegister_FailCases(t *testing.T) {

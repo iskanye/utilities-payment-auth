@@ -24,7 +24,7 @@ tasks:
       - go test ./tests
   auth-test:
     cmds:
-      - timeout 5s go run ./cmd/auth --config=./config/tests.yaml
+      - go run ./cmd/auth --config=./config/tests.yaml
 
   init_db:
     aliases:
