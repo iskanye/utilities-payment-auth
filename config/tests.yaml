@@ -1,6 +1,0 @@
-storage_path: "./storage/auth.db"
-secret: "TEST-SECRET"
-grpc:
-  port: 44044
-  timeout: 10h
-token_ttl: "1s"
