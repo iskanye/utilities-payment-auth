@@ -26,10 +26,6 @@ type Auth interface {
 		email string,
 		password string,
 	) (userID int64, err error)
-	Validate(
-		ctx context.Context,
-		token string,
-	) (isValid bool, err error)
 	IsAdmin(
 		ctx context.Context,
 		userId int64,
@@ -81,22 +77,6 @@ func (s *serverAPI) Register(
 	}
 
 	return &protoAuth.RegisterResponse{UserId: uid}, nil
-}
-
-func (s *serverAPI) Validate(
-	ctx context.Context,
-	in *protoAuth.ValidateRequest,
-) (*protoAuth.ValidateResponse, error) {
-	if in.Token == "" {
-		return nil, status.Error(codes.InvalidArgument, "token is required")
-	}
-
-	isValid, err := s.auth.Validate(ctx, in.GetToken())
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	return &protoAuth.ValidateResponse{IsValid: isValid}, nil
 }
 
 func (s *serverAPI) IsAdmin(

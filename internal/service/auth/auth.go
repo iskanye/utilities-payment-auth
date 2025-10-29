@@ -142,30 +142,6 @@ func (a *Auth) Register(
 	return id, nil
 }
 
-func (a *Auth) Validate(
-	ctx context.Context,
-	token string,
-) (bool, error) {
-	const op = "Auth.Validate"
-
-	log := a.log.With(
-		slog.String("op", op),
-	)
-
-	log.Info("validating user")
-
-	isValid, err := jwt.Validate(token, a.secret)
-	if err != nil {
-		log.Error("failed to validate user", logger.Err(err))
-
-		return false, fmt.Errorf("%s: %w", op, err)
-	}
-
-	log.Info("user validated", slog.Bool("is_valid", isValid))
-
-	return isValid, nil
-}
-
 // IsAdmin checks if user is admin.
 func (a *Auth) IsAdmin(
 	ctx context.Context,

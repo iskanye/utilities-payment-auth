@@ -24,14 +24,3 @@ func NewToken(user models.User, secret string, duration time.Duration) (string, 
 
 	return tokenString, nil
 }
-
-func Validate(tokenStr string, secret string) (bool, error) {
-	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (any, error) {
-		return []byte(secret), nil
-	})
-	if err != nil {
-		return false, err
-	}
-
-	return token.Valid, nil
-}
