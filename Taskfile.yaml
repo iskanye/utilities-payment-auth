@@ -17,14 +17,13 @@ tasks:
   test:
     desc: "Run tests"
     deps:
-      - go-test
-      - auth-test
-  go-test:    
-    cmds: 
-      - go test ./tests
-  auth-test:
+      - test-db
     cmds:
       - go run ./cmd/auth --config=./config/tests.yaml
+  test-db:    
+    cmds: 
+      - go run ./cmd/migrator --storage-path=./storage/test.db --migrations-path=./migrations 
+      - go run ./cmd/admins --storage=./storage/test.db --admins=./config/admins.yaml
 
   init_db:
     aliases:
