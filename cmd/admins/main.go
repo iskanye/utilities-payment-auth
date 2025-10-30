@@ -28,7 +28,7 @@ func main() {
 	flag.StringVar(&adminsPath, "admins", "", "path to admins credentials")
 	flag.Parse()
 
-	cfg := config.MustLoadPath[Config](adminsPath, config.NoModyfing)
+	cfg := config.MustLoadPath[Config](adminsPath)
 
 	s, err := storage.New(storagePath)
 	if err != nil {

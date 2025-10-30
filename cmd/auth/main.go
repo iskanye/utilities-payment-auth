@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	cfg := pkgConfig.MustLoad(config.GenerateSecret)
+	cfg := pkgConfig.MustLoad[config.Config]()
 	log := logger.SetupPrettySlog()
 	app := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.Secret, cfg.TokenTTL)
 
