@@ -26,10 +26,6 @@ type Auth interface {
 		email string,
 		password string,
 	) (userID int64, err error)
-	IsAdmin(
-		ctx context.Context,
-		userId int64,
-	) (isAdmin bool, err error)
 }
 
 func Register(gRPCServer *grpc.Server, auth Auth) {
@@ -76,20 +72,4 @@ func (s *serverAPI) Register(
 	}
 
 	return &protoAuth.RegisterResponse{UserId: uid}, nil
-}
-
-func (s *serverAPI) IsAdmin(
-	ctx context.Context,
-	in *protoAuth.User,
-) (*protoAuth.Permissions, error) {
-	if in.UserId == 0 {
-		return nil, status.Error(codes.InvalidArgument, "user_id is required")
-	}
-
-	isAdmin, err := s.auth.IsAdmin(ctx, in.GetUserId())
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	return &protoAuth.Permissions{IsAdmin: isAdmin}, nil
 }

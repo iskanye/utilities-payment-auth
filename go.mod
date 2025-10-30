@@ -9,8 +9,8 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/golang-migrate/migrate/v4 v4.19.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
-	github.com/iskanye/utilities-payment v0.0.0-20251030012307-f62fb70d15e5
-	github.com/iskanye/utilities-payment-proto v0.0.0-20251029221708-c656c428185f
+	github.com/iskanye/utilities-payment v0.0.0-20251030204707-d5f12eaf7ca0
+	github.com/iskanye/utilities-payment-proto v0.0.0-20251030113237-b6b89f50efa6
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/crypto v0.43.0
 	google.golang.org/grpc v1.76.0

@@ -15,7 +15,7 @@ tasks:
       - go run ./cmd/auth --config=./config/dev.yaml
 
   test:
-    desc: "Run tests"
+    desc: "Run auth servise (tests)"
     deps:
       - test-db
     cmds:

@@ -14,6 +14,7 @@ func NewToken(user models.User, secret string, duration time.Duration) (string, 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["uid"] = user.ID
 	claims["email"] = user.Email
+	claims["is_admin"] = user.IsAdmin
 	claims["exp"] = time.Now().Add(duration).Unix()
 
 	// Подписываем токен, используя секретный ключ приложения

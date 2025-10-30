@@ -54,6 +54,7 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 
 	assert.Equal(t, respReg.GetUserId(), int64(claims["uid"].(float64)))
 	assert.Equal(t, email, claims["email"].(string))
+	assert.False(t, claims["is_admin"].(bool))
 
 	const deltaSeconds = 1
 
@@ -101,11 +102,7 @@ func TestRegisterLogin_Permissions_IsAdmin(t *testing.T) {
 	claims, ok := tokenParsed.Claims.(jwt.MapClaims)
 	require.True(t, ok)
 
-	respAdm, err := st.AuthClient.IsAdmin(ctx, &auth.User{
-		UserId: int64(claims["uid"].(float64)),
-	})
-	require.NoError(t, err)
-	assert.Equal(t, respAdm.GetIsAdmin(), true)
+	assert.True(t, claims["is_admin"].(bool))
 }
 
 func TestRegisterLogin_DuplicatedRegistration(t *testing.T) {
