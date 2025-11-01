@@ -15,11 +15,12 @@ import (
 )
 
 type Auth struct {
-	log         *slog.Logger
-	usrSaver    UserSaver
-	usrProvider UserProvider
-	secret      string
-	tokenTTL    time.Duration
+	log          *slog.Logger
+	usrSaver     UserSaver
+	usrProvider  UserProvider
+	usrsProvider UsersProvider
+	secret       string
+	tokenTTL     time.Duration
 }
 
 type UserSaver interface {
@@ -38,21 +39,29 @@ type UserProvider interface {
 	) (models.User, error)
 }
 
+type UsersProvider interface {
+	GetUsers(
+		ctx context.Context,
+	) ([]models.User, error)
+}
+
 var ErrInvalidCredentials = errors.New("invalid credentials")
 
 func New(
 	log *slog.Logger,
 	userSaver UserSaver,
 	userProvider UserProvider,
+	usersProvider UsersProvider,
 	secret string,
 	tokenTTL time.Duration,
 ) *Auth {
 	return &Auth{
-		usrSaver:    userSaver,
-		usrProvider: userProvider,
-		log:         log,
-		secret:      secret,
-		tokenTTL:    tokenTTL,
+		usrSaver:     userSaver,
+		usrProvider:  userProvider,
+		usrsProvider: usersProvider,
+		log:          log,
+		secret:       secret,
+		tokenTTL:     tokenTTL,
 	}
 }
 
@@ -136,4 +145,25 @@ func (a *Auth) Register(
 	}
 
 	return id, nil
+}
+
+func (a *Auth) GetUsers(
+	ctx context.Context,
+) ([]models.User, error) {
+	const op = "Auth.GetUsers"
+
+	log := a.log.With(
+		slog.String("op", op),
+	)
+
+	log.Info("trying to get all users")
+
+	users, err := a.usrsProvider.GetUsers(ctx)
+	if err != nil {
+		log.Error("failed to get all users", logger.Err(err))
+
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return users, nil
 }

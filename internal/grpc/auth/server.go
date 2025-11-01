@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	protoAuth "github.com/iskanye/utilities-payment-proto/auth"
+	"github.com/iskanye/utilities-payment/pkg/models"
 )
 
 type serverAPI struct {
@@ -20,12 +21,15 @@ type Auth interface {
 		ctx context.Context,
 		email string,
 		password string,
-	) (token string, err error)
+	) (string, error)
 	Register(
 		ctx context.Context,
 		email string,
 		password string,
-	) (userID int64, err error)
+	) (int64, error)
+	GetUsers(
+		ctx context.Context,
+	) ([]models.User, error)
 }
 
 func Register(gRPCServer *grpc.Server, auth Auth) {
@@ -72,4 +76,28 @@ func (s *serverAPI) Register(
 	}
 
 	return &protoAuth.RegisterResponse{UserId: uid}, nil
+}
+
+func (s *serverAPI) Users(
+	in *protoAuth.UsersRequest,
+	stream grpc.ServerStreamingServer[protoAuth.User],
+) error {
+	users, err := s.auth.GetUsers(stream.Context())
+	if err != nil {
+		return status.Error(codes.Internal, err.Error())
+	}
+
+	for _, i := range users {
+		id := i.ID
+		email := i.Email
+		user := &protoAuth.User{
+			Id:    id,
+			Email: email,
+		}
+		if err = stream.SendMsg(user); err != nil {
+			return status.Error(codes.Internal, err.Error())
+		}
+	}
+
+	return nil
 }

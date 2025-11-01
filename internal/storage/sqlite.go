@@ -79,3 +79,33 @@ func (s *Storage) User(ctx context.Context, email string) (models.User, error) {
 
 	return user, nil
 }
+
+// Get all users (except admins)
+func (s *Storage) GetUsers(ctx context.Context) ([]models.User, error) {
+	const op = "storage.sqlite.GetUsers"
+
+	stmt, err := s.db.Prepare("SELECT id, email FROM users WHERE is_admin = 0")
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+
+	rows, err := stmt.QueryContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+
+	defer rows.Close()
+	var users []models.User
+
+	for rows.Next() {
+		var user models.User
+		err = rows.Scan(&user.ID, &user.Email)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", op, err)
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}

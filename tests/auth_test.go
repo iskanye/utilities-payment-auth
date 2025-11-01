@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"io"
 	"testing"
 	"time"
 
@@ -228,6 +229,22 @@ func TestLogin_FailCases(t *testing.T) {
 			require.Error(t, err)
 			require.Contains(t, err.Error(), tt.expectedErr)
 		})
+	}
+}
+
+func TestGetUsers_Success(t *testing.T) {
+	ctx, st := suite.New(t)
+
+	respUsers, err := st.AuthClient.Users(ctx, &auth.UsersRequest{})
+	require.NoError(t, err)
+
+	for {
+		user, err := respUsers.Recv()
+		if err == io.EOF {
+			break
+		}
+		require.NoError(t, err)
+		require.NotEmpty(t, user)
 	}
 }
 
