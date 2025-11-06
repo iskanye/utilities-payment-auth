@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/glebarez/go-sqlite"
-	"github.com/iskanye/utilities-payment/pkg/models"
+	"github.com/iskanye/utilities-payment-utils/pkg/models"
 	sqlite3 "modernc.org/sqlite/lib"
 )
 

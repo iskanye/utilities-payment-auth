@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/iskanye/utilities-payment/pkg/models"
+	"github.com/iskanye/utilities-payment-utils/pkg/models"
 )
 
 func NewToken(user models.User, secret string, duration time.Duration) (string, error) {

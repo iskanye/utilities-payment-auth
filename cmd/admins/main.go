@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/iskanye/utilities-payment-auth/internal/storage"
-	"github.com/iskanye/utilities-payment/pkg/config"
+	"github.com/iskanye/utilities-payment-utils/pkg/config"
 	"golang.org/x/crypto/bcrypt"
 
 	_ "github.com/glebarez/go-sqlite"

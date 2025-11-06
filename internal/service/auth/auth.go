@@ -9,8 +9,8 @@ import (
 
 	"github.com/iskanye/utilities-payment-auth/internal/lib/jwt"
 	"github.com/iskanye/utilities-payment-auth/internal/storage"
-	"github.com/iskanye/utilities-payment/pkg/logger"
-	"github.com/iskanye/utilities-payment/pkg/models"
+	"github.com/iskanye/utilities-payment-utils/pkg/logger"
+	"github.com/iskanye/utilities-payment-utils/pkg/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
