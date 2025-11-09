@@ -20,7 +20,7 @@ type Suite struct {
 }
 
 const (
-	grpcHost = "localhost"
+	grpcHost = ""
 )
 
 // New creates new test suite.
