@@ -34,10 +34,7 @@ jobs:
     name: 'Run tests'
     runs-on: ubuntu-latest
     needs: container
-    container:
-      image: iskanye/auth:latest
-      ports:
-        - 44044:44044
+    container: iskanye/auth:latest
 
     steps:
       - uses: actions/checkout@v5
