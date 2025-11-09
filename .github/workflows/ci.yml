@@ -2,12 +2,12 @@ name: 'Tests'
 
 on: ["push"]
 
-concurrency: testing
 
 jobs:
   container:
     name: 'Set up container'
     runs-on: ubuntu-latest
+    concurrency: container
 
     steps:
       - name: Checkout
