@@ -13,6 +13,15 @@ import (
 
 func main() {
 	cfg := pkgConfig.MustLoad[config.Config]()
+
+	// Если секрет не задан в конфиге ищем его в параметрах окружения
+	if cfg.Secret == "" {
+		cfg.Secret = os.Getenv("AUTH_SECRET")
+	}
+	if cfg.Secret == "" {
+		panic("auth secret mustnt be empty")
+	}
+
 	log := logger.SetupPrettySlog()
 	app := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.Secret, cfg.TokenTTL)
 
