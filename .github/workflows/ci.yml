@@ -2,6 +2,8 @@ name: 'Tests'
 
 on: ["push"]
 
+concurrency: testing
+
 jobs:
   container:
     name: 'Set up container'
@@ -28,7 +30,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: iskanye/auth:latest
+          tags: auth:latest
   test:
     name: 'Run tests'
     runs-on: ubuntu-latest
