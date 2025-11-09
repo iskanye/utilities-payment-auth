@@ -1,0 +1,52 @@
+name: 'Tests'
+
+on: ["push"]
+
+jobs:
+  container:
+    name: 'Set up container'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: iskanye/auth:latest
+  test:
+    name: 'Run tests'
+    runs-on: ubuntu-latest
+    container:
+      image: iskanye/auth:latest
+      ports:
+        - 44044:44044
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Go 1.25.x
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.x'
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Run tests
+        run: go test -v ./tests
