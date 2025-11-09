@@ -7,7 +7,7 @@ jobs:
   container:
     name: 'Set up container'
     runs-on: ubuntu-latest
-    concurrency: container
+    concurrency: tests
 
     steps:
       - name: Checkout
@@ -30,10 +30,11 @@ jobs:
         with:
           context: .
           push: true
-          tags: auth:latest
+          tags: iskanye/auth:latest
   test:
     name: 'Run tests'
     runs-on: ubuntu-latest
+    concurrency: tests
     container:
       image: iskanye/auth:latest
       ports:
