@@ -13,7 +13,7 @@ import (
 
 func main() {
 	cfg := pkgConfig.MustLoad[config.Config]()
-	cfg.LoadSecret()
+	cfg.MustGetSecret()
 
 	log := logger.SetupPrettySlog()
 	app := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.Secret, cfg.TokenTTL)

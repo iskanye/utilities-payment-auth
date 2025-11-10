@@ -31,6 +31,7 @@ func New(t *testing.T) (context.Context, *Suite) {
 	t.Parallel()
 
 	cfg := pkgConfig.MustLoadPath[config.Config](configPath())
+	cfg.MustGetSecret()
 
 	ctx, cancelCtx := context.WithTimeout(context.Background(), cfg.GRPC.Timeout)
 
