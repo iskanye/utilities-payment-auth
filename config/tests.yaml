@@ -1,5 +1,4 @@
 storage_path: "./storage/test.db"
-secret: "TEST-SECRET"
 grpc:
   port: 44044
   timeout: 10h

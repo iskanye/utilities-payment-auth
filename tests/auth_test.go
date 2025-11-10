@@ -14,7 +14,6 @@ import (
 )
 
 const (
-	secret         = "TEST-SECRET"
 	passDefaultLen = 10
 
 	adminEmail = "admin@admin.com"
@@ -46,7 +45,7 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 	loginTime := time.Now()
 
 	tokenParsed, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil
+		return []byte(st.Cfg.Secret), nil
 	})
 	require.NoError(t, err)
 
@@ -76,7 +75,7 @@ func TestRegisterLogin_Permissions_IsAdmin(t *testing.T) {
 	require.NotEmpty(t, token)
 
 	tokenParsed, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil
+		return []byte(st.Cfg.Secret), nil
 	})
 	require.NoError(t, err)
 
@@ -133,7 +132,7 @@ func TestRegisterLogin_TokenExpired(t *testing.T) {
 	time.Sleep(2 * time.Second)
 
 	_, err = jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil
+		return []byte(st.Cfg.Secret), nil
 	})
 	require.Contains(t, err.Error(), "token is expired")
 }
