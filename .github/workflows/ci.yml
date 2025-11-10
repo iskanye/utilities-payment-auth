@@ -24,6 +24,7 @@ jobs:
           go build -o ./auth ./cmd/auth
       - name: Set up database
         run: |
+          mkdir storage
           go run ./cmd/migrator --storage-path=./storage/test.db --migrations-path=./migrations
 
       - name: Add admins
