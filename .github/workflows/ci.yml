@@ -38,6 +38,8 @@ jobs:
       image: iskanye/auth:latest
       ports:
         - 44044
+      volumes:
+        - /home/app
 
     steps:
       - uses: actions/checkout@v5
