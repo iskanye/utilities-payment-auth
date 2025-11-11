@@ -3,7 +3,7 @@ package jwt
 import (
 	"time"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/iskanye/utilities-payment-utils/pkg/models"
 )
 

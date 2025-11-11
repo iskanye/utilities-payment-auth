@@ -5,7 +5,6 @@ go 1.25.3
 require (
 	github.com/brianvoe/gofakeit/v6 v6.28.0
 	github.com/glebarez/go-sqlite v1.22.0
-	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/golang-migrate/migrate/v4 v4.19.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
