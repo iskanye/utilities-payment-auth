@@ -10,10 +10,10 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
 	github.com/iskanye/utilities-payment-proto v0.1.1
 	github.com/iskanye/utilities-payment-utils v0.1.1
+	github.com/mattn/go-sqlite3 v1.14.32
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/crypto v0.43.0
 	google.golang.org/grpc v1.76.0
-	modernc.org/sqlite v1.40.0
 )
 
 require (
@@ -41,5 +41,6 @@ require (
 	modernc.org/libc v1.66.10 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
+	modernc.org/sqlite v1.40.0 // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
 )

@@ -6,9 +6,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/glebarez/go-sqlite"
 	"github.com/iskanye/utilities-payment-utils/pkg/models"
-	sqlite3 "modernc.org/sqlite/lib"
+	sqlite3 "github.com/mattn/go-sqlite3"
 )
 
 type Storage struct {
@@ -41,7 +40,8 @@ func (s *Storage) SaveUser(ctx context.Context, email string, passHash []byte, i
 
 	res, err := stmt.ExecContext(ctx, email, passHash, isAdmin)
 	if err != nil {
-		if sqliteErr, ok := err.(*sqlite.Error); ok && sqliteErr.Code() == sqlite3.SQLITE_CONSTRAINT_UNIQUE {
+		var sqliteErr sqlite3.Error
+		if errors.As(err, &sqliteErr) && sqliteErr.ExtendedCode == sqlite3.ErrConstraintUnique {
 			return 0, fmt.Errorf("%s: %w", op, ErrUserExists)
 		}
 
